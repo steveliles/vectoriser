@@ -8,6 +8,9 @@ import com.sjl.vector.vectorize.*;
 
 public class ShapeTest
 {
+    
+    // TODO: dsl for building shapes ;)    
+    
     @Test
     public void testCollapsesToClockwiseChordsInsteadOfHorizontal() {
         Shape _s = new Shape(Colour.get(0,0,0));
