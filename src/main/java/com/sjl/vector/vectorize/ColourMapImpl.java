@@ -28,10 +28,12 @@ public class ColourMapImpl implements ColourMap {
             _s.add(_c);
         }
         
+System.out.println(_shapes.asList().size());        
+        
         List<Shape> _unsimplified = _shapes.asList();
         List<Shape> _result = new ArrayList<Shape>();
         for (Shape _s : _unsimplified) {
-            _result.addAll(_s.simplify());
+            _result.addAll(_s.simplify());            
         }
         
         return _result;

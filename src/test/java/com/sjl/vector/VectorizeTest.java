@@ -14,11 +14,11 @@ import com.sjl.vector.vectorize.*;
 
 public class VectorizeTest {
 
-//    @Test
+    @Test
     public void writeOneToTheDesktop()
     throws Exception {
          Vectorizer _v = new Vectorizer();
-         SVG _result = _v.vectorize(loadTestImage("duck-to-vectorize.png"));
+         SVG _result = _v.vectorize(loadTestImage("pre-processed-duck.jpg"));
          XMLOutputter _out = new XMLOutputter(Format.getPrettyFormat());
          
         _out.output(_result.toXML(), new FileWriter(new File("/home/steve/Desktop/test.svg")));
@@ -34,6 +34,24 @@ public class VectorizeTest {
     public void vectorizesSeparateSimplePolygons()
     throws Exception {
          testVectorisation("svg-test-2.png", "svg-test-result-2.svg");
+    }
+    
+    @Test
+    public void vectorizesSimpleNestedPolygons()
+    throws Exception {
+         testVectorisation("svg-test-3.png", "svg-test-result-3.svg");
+    }
+    
+    @Test
+    public void vectorizesNestedPolygonsWithRepeatColours()
+    throws Exception {
+         testVectorisation("svg-test-4.png", "svg-test-result-4.svg");
+    }
+    
+    @Test
+    public void vectorizesComplexPolygons()
+    throws Exception {
+         testVectorisation("svg-test-5.png", "svg-test-result-5.svg");
     }
     
     private void testVectorisation(String aBitmapName, String anSVGName)

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg">
+  <polygon style="stroke:#ffffff; fill:#ffffff" points="0,0  99,0  99,16  10,17  10,75  0,75  0,0  " />
+  <polygon style="stroke:#fa0000; fill:#fa0000" points="11,17  88,17  88,31  25,32  25,75  11,75  11,17  " />
+  <polygon style="stroke:#ffffff; fill:#ffffff" points="26,32  41,32  41,75  26,75  26,32  " />
+  <polygon style="stroke:#fa0000; fill:#fa0000" points="42,32  58,32  58,75  42,75  42,32  " />
+  <polygon style="stroke:#ffffff; fill:#ffffff" points="59,32  75,32  75,75  99,76  99,99  0,99  0,76  59,75  59,32  " />
+  <polygon style="stroke:#fa0000; fill:#fa0000" points="76,32  88,32  88,75  76,75  76,32  " />
+  <polygon style="stroke:#ffffff; fill:#ffffff" points="89,17  99,17  99,75  89,75  89,17  " />
+</svg>

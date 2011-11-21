@@ -30,14 +30,19 @@ public class SVG {
         Namespace _ns = Namespace.getNamespace("http://www.w3.org/2000/svg");
         Element _root = new Element("svg", _ns);
         
+        List<Shape> _shapes = new ArrayList<Shape>();
         for (ColourMap _cm : maps.values()) {
-            for (Shape _s : _cm.getShapes()) {                
-                Element _e = new Element("polygon", _ns);
-                _e.setAttribute("style", "stroke:" + _s.getColour() + "; fill:" + _s.getColour());
-                _e.setAttribute("points", getPoints(_s));
-                
-                _root.addContent(_e);
-            }
+            _shapes.addAll(_cm.getShapes());
+        }
+        
+        Collections.sort(_shapes);
+        
+        for (Shape _s : _shapes) {                
+            Element _e = new Element("polygon", _ns);
+            _e.setAttribute("style", "stroke:" + _s.getColour() + "; fill:" + _s.getColour());
+            _e.setAttribute("points", getPoints(_s));
+            
+            _root.addContent(_e);
         }
         
         return new Document(_root);        

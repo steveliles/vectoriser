@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg">
+  <polygon style="stroke:#ffffff; fill:#ffffff" points="0,0  99,0  99,99  0,99  0,0  " />
+  <polygon style="stroke:#bd9ac4; fill:#bd9ac4" points="15,15  86,15  86,88  15,88  15,15  " />
+  <polygon style="stroke:#fa0000; fill:#fa0000" points="29,31  73,31  73,75  29,75  29,31  " />    
+</svg>

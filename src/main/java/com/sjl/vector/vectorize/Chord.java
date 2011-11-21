@@ -17,8 +17,16 @@ public class Chord {
         return end;
     }
     
+    public void setStart(Point aStart) {
+        start = aStart;
+    }
+    
+    public void setEnd(Point aEnd) {
+        end = aEnd;
+    }
+    
     public boolean touches(Chord aChord) {
-        if (start.getY() - aChord.start.getY() > 1)
+        if (Math.abs((aChord.start.getY() - start.getY())) > 1)
             return false;
         
         return (
@@ -83,5 +91,5 @@ public class Chord {
     
     private boolean between(int aPoint, int aStart, int anEnd) {
         return (aPoint >= aStart-1) && (aPoint <= anEnd+1);
-    }
+    }    
 }
