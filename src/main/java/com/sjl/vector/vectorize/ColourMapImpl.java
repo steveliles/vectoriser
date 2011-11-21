@@ -17,18 +17,24 @@ public class ColourMapImpl implements ColourMap {
     }
 
     public List<Shape> getShapes() {
-        Shapes _result = new Shapes();
+        Shapes _shapes = new Shapes();
         
         for (Chord _c : chords) {
-            Shape _s = _result.getTouchingShape(_c);
+            Shape _s = _shapes.getTouchingShape(_c);
             if (_s == null) {
                 _s = new Shape(colour);
-                _result.add(_s);
+                _shapes.add(_s);
             }
             _s.add(_c);
         }
         
-        return _result.asList();
+        List<Shape> _unsimplified = _shapes.asList();
+        List<Shape> _result = new ArrayList<Shape>();
+        for (Shape _s : _unsimplified) {
+            _result.addAll(_s.simplify());
+        }
+        
+        return _result;
     }
     
     class Shapes {

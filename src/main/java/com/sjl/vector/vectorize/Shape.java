@@ -26,16 +26,59 @@ public class Shape implements Iterable<Chord> {
                 return true;
         }
         return false;
+    }    
+    
+    public Colour getColour() {
+        return colour;
     }
     
-    public void optimise() {
-//System.out.println("initial: " + chords);        
-        reOrder();
-//System.out.println("re-ordered: " + chords);        
-        collapse();
-//System.out.println("collapsed: " + chords);      
+    public Iterator<Chord> iterator() {
+        return chords.iterator();
     }
-
+    
+    public List<Chord> getChords() {
+        return chords;
+    }
+    
+    @Override
+    public String toString() {
+        return "!" + colour + "!" + chords + "!";
+    }
+    
+    public List<Shape> simplify() {
+        Shapes _shapes = new Shapes();
+                        
+        Chord _previous = null;        
+        for (Chord _current : chords) {
+            if (isNewScanLine(_current, _previous)) {
+                Shape _shape = _shapes.getTouchingShape(_current);
+                if (_shape == null) {
+                    _shape = new Shape(colour);
+                    _shapes.add(_shape);
+                }
+                _shape.add(_current);                               
+            } else {
+                Shape _shape = new Shape(colour);
+                _shape.add(_current);
+                _shapes.add(_shape);
+            }
+            _previous = _current;
+        }
+        
+        List<Shape> _result = _shapes.asList();
+        for (Shape _s : _result)
+            _s.optimise();
+        
+        return _result;
+    }        
+    
+    private void optimise() {     
+        reOrder();
+        collapse();
+    }
+    
+    // re-organize the chords so that we follow a path around the outline
+    // of the object instead of through scanlines
     private void reOrder()
     {
         List<Chord> _chords = new ArrayList<Chord>();
@@ -80,20 +123,35 @@ public class Shape implements Iterable<Chord> {
         chords = _chords;
     }
     
-    public Colour getColour() {
-        return colour;
+    private boolean isNewScanLine(Chord aCurrent, Chord aPrevious) {
+        if (aPrevious == null)
+            return true;
+        
+        return (aCurrent.getStart().getY() != aPrevious.getStart().getY());
     }
     
-    public Iterator<Chord> iterator() {
-        return chords.iterator();
-    }
-    
-    public List<Chord> getChords() {
-        return chords;
-    }
-    
-    @Override
-    public String toString() {
-        return "!" + colour + "!" + chords + "!";
+    private class Shapes {
+        private List<Shape> shapes;
+        
+        public Shapes() {
+            shapes = new ArrayList<Shape>();
+        }
+        
+        public void add(Shape aShape) {
+            shapes.add(aShape);
+        }
+        
+        public Shape getTouchingShape(Chord aChord) {
+            for (int i=shapes.size()-1; i>=0; i--) {
+                Shape _s = shapes.get(i);
+                if (_s.touches(aChord))
+                    return _s;
+            }
+            return null;
+        }
+        
+        public List<Shape> asList() {
+            return shapes;
+        }
     }
 }

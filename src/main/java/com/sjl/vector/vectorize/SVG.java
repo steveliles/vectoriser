@@ -31,8 +31,7 @@ public class SVG {
         Element _root = new Element("svg", _ns);
         
         for (ColourMap _cm : maps.values()) {
-            for (Shape _s : _cm.getShapes()) {       
-                _s.optimise();
+            for (Shape _s : _cm.getShapes()) {                
                 Element _e = new Element("polygon", _ns);
                 _e.setAttribute("style", "stroke:" + _s.getColour() + "; fill:" + _s.getColour());
                 _e.setAttribute("points", getPoints(_s));
@@ -65,8 +64,7 @@ public class SVG {
     public String toString() {
         StringBuilder _sb = new StringBuilder();
         for (ColourMap _cm : maps.values()) {
-            for (Shape _s : _cm.getShapes()) {
-                _s.optimise();
+            for (Shape _s : _cm.getShapes()) {                
                 _sb.append(_s.toString()).append("\r\n");
             }
         }
