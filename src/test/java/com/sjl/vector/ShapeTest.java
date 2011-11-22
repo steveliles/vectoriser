@@ -108,5 +108,5 @@ public class ShapeTest
         Assert.assertTrue(_chords.contains(new Chord(new Point(1,2), new Point(1,3))));
         Assert.assertTrue(_chords.contains(new Chord(new Point(1,3), new Point(0,3))));
         Assert.assertTrue(_chords.contains(new Chord(new Point(0,3), new Point(0,0))));        
-    }
+    }    
 }

@@ -14,14 +14,19 @@ import com.sjl.vector.vectorize.*;
 
 public class VectorizeTest {
 
+    @Before
+    public void setup() {
+        System.out.println("---");
+    }
+    
     @Test
     public void writeOneToTheDesktop()
     throws Exception {
          Vectorizer _v = new Vectorizer();
-         SVG _result = _v.vectorize(loadTestImage("pre-processed-duck.jpg"));
+         SVG _result = _v.vectorize(ImageIO.read(new File("/home/steve/Desktop/pre-processed-duck.png")));
          XMLOutputter _out = new XMLOutputter(Format.getPrettyFormat());
          
-        _out.output(_result.toXML(), new FileWriter(new File("/home/steve/Desktop/test.svg")));
+        _out.output(_result.toXML(), new FileWriter(new File("/home/steve/Desktop/test.txt")));
     }
     
     @Test
@@ -58,6 +63,9 @@ public class VectorizeTest {
     throws Exception {
          Vectorizer _v = new Vectorizer();
          SVG _result = _v.vectorize(loadTestImage(aBitmapName));
+         
+         System.out.println(_result);
+         
          XMLOutputter _out = new XMLOutputter(Format.getPrettyFormat());
                   
          Assert.assertEquals(

@@ -9,7 +9,7 @@ public class Shape implements Iterable<Chord>, Comparable<Shape> {
     private int zIndex = 1;
     
     public Shape(Colour aColour) {
-        this(aColour, new ArrayList<Chord>());
+        this(aColour, new ArrayList<Chord>());       
     }
     
     public Shape(Colour aColour, List<Chord> aChords) {
@@ -71,11 +71,45 @@ public class Shape implements Iterable<Chord>, Comparable<Shape> {
         }
     }
 
-    public List<Shape> simplify() {
+    public List<Shape> simplify() {   
         removeCompletelyNestedShapes();
-        return segmentComplexShapes();        
+        List<Shape> _simpleShapes = segmentComplexShapes();
+        
+        List<Shape> _result = new ArrayList<Shape>();
+        for (Shape _s : _simpleShapes) {
+            _result.addAll(_s.outline());
+        }
+        
+        return _result;
     }
     
+    private List<Shape> outline() {        
+        if (chords.isEmpty())
+            return new ArrayList<Shape>();
+                
+        List<Point> _points = new ArrayList<Point>();        
+        for (Chord _c : chords) {
+            _points.add(_c.getEnd());
+        }
+        
+        for (int i=chords.size()-1; i>=0; i--) {
+            _points.add(chords.get(i).getStart());
+        }
+        
+        Shape _shape = new Shape(colour);
+        Point _prev = first().getStart();
+        for (Point _current : _points) {
+            _shape.add(new Chord(_prev, _current));
+            _prev = _current;
+        }
+        
+        _shape.collapse();
+        
+        List<Shape> _result = new ArrayList<Shape>();        
+        _result.add(_shape);
+        return _result;
+    }
+        
     private List<Shape> segmentComplexShapes() {
         Shapes _shapes = new Shapes();
         
@@ -97,9 +131,7 @@ public class Shape implements Iterable<Chord>, Comparable<Shape> {
         
         List<Shape> _result = _shapes.asList();
         _result.add(_main);
-        for (Shape _s : _result)
-            _s.optimise();
-        
+       
         return _result;
     }
 
@@ -170,34 +202,6 @@ public class Shape implements Iterable<Chord>, Comparable<Shape> {
         }
         return null;
     }
-    
-    private void optimise() {     
-        reOrder();
-        collapse();
-    }
-    
-    // re-organize the chords so that we follow a path around the outline
-    // of the object instead of through scanlines
-    private void reOrder() {
-        List<Chord> _chords = new ArrayList<Chord>();
-        
-        Chord _previous = new Chord(
-            chords.get(0).getStart(), 
-            chords.get(0).getStart() // a trick
-        );
-                
-        for (Chord _c : chords) {
-            _chords.add(new Chord(_previous.getEnd(), _c.getEnd()));
-            _previous = _c;
-        }
-        
-        for (int i=chords.size()-1; i>=0; i--) {
-            Chord _c = new Chord(_previous.getEnd(), chords.get(i).getStart());
-            _chords.add(_previous = _c);      
-        }
-        
-        chords = _chords;
-    }    
     
     private void collapse() {
         List<Chord> _chords = new ArrayList<Chord>();

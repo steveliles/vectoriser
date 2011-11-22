@@ -21,7 +21,7 @@ public class Vectorizer {
             for (int x=0; x<anImage.getWidth(); x++) {                                
                 
                 // set the current pixel values
-                int[] _colour = _raster.getPixel(x, y, new int[3]);
+                int[] _colour = _raster.getPixel(x, y, new int[3]);                
                 _current = new Pixel(new Point(x, y), Colour.get(_colour));
                 
                 if (_current.isSameColourAs(_previous)) {

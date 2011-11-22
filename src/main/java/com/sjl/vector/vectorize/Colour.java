@@ -15,7 +15,7 @@ public class Colour {
             }
         }
         colours.add(_c1);
-        return _c1;
+        return _c1;        
     }
     
     public static Colour get(int[] aColour) {
@@ -82,7 +82,7 @@ public class Colour {
     }
     
     @Override
-    public String toString() {
+    public String toString() {     
         return "#" + pad(Integer.toHexString(red)) + pad(Integer.toHexString(green)) + pad(Integer.toHexString(blue));
     }
     
