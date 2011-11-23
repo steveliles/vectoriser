@@ -51,8 +51,13 @@ public class ColourMapImpl implements ColourMap {
         public Shape getTouchingShape(Chord aChord) {
             for (int i=shapes.size()-1; i>=0; i--) {
                 Shape _s = shapes.get(i);
-                if (_s.touches(aChord))
-                    return _s;
+                if (_s.touches(aChord)) {
+                    // prevent complex shapes by only allowing the left-most chord
+                    // to attach even if more chords are also connected in practice
+                    // - results in more smaller shapes, but makes it much easier to
+                    // create the vector shapes later
+                    return (_s.last().getEnd().getY() == aChord.getEnd().getY()) ? null : _s;
+                }
             }
             return null;
         }

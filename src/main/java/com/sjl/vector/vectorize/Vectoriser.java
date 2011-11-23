@@ -1,10 +1,24 @@
 package com.sjl.vector.vectorize;
 
 import java.awt.image.*;
+import java.io.*;
 
-public class Vectorizer {
+import javax.imageio.*;
+
+import org.jdom.output.*;
+
+public class Vectoriser {
     
-    public Vectorizer() {}
+    public static void main(String[] anArgs) 
+    throws Exception {
+        Vectoriser _v = new Vectoriser();
+        SVG _svg = _v.vectorize(ImageIO.read(new File(anArgs[0])));
+        
+        XMLOutputter _out = new XMLOutputter(Format.getPrettyFormat());
+        _out.output(_svg.toXML(), new BufferedOutputStream(new FileOutputStream(new File(anArgs[1]))));
+    }
+    
+    public Vectoriser() {}
     
     public SVG vectorize(BufferedImage anImage)
     throws Exception {

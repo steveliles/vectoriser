@@ -1,9 +1,20 @@
 package com.sjl.vector.preprocess;
 
 import java.awt.image.*;
+import java.io.*;
+
+import javax.imageio.*;
 
 public class VectorisationPreProcessor
 {
+    public static void main(String[] anArgs) 
+    throws Exception {
+        VectorisationPreProcessor _vpp = new VectorisationPreProcessor();
+        
+        BufferedImage _img = ImageIO.read(new File(anArgs[0]));
+        ImageIO.write(_vpp.preProcess(_img), "png", new File(anArgs[1]));
+    }
+    
     public BufferedImage preProcess(BufferedImage anImage)
     throws Exception {        
         Raster _raster = anImage.getData();
@@ -12,8 +23,8 @@ public class VectorisationPreProcessor
             anImage.getWidth(), anImage.getHeight(), anImage.getType());
         WritableRaster _writable = _result.getRaster();
 
-        int _blockWidth = 8;
-        int _blockHeight = 8;
+        int _blockWidth = 4;
+        int _blockHeight = 4;
         
         int _halfWidth = _blockWidth / 2;
         int _halfHeight = _blockWidth / 2; 

@@ -35,16 +35,18 @@ public class Chord {
         );
     }
     
-    public boolean sameDirectionAs(Chord aChord) {
-        // todo allow some slop?
-        return direction().equals(aChord.direction());
+    public boolean sameDirectionAs(Chord aChord, int aMaxDegreesDifference) {
+        if (aMaxDegreesDifference == 0)
+            return direction().equals(aChord.direction());        
+        
+        return direction().angleInDegrees(aChord.direction()) <= aMaxDegreesDifference;
     }
     
     public UnitVector direction() {
         int _x = Math.max(start.getX(), end.getX()) - Math.min(start.getX(), end.getX());
         int _y = Math.max(start.getY(), end.getY()) - Math.min(start.getY(), end.getY());
         
-        double _magnitude = Math.pow(_x, 2) + Math.pow(_y, 2);                
+        double _magnitude = Math.sqrt(_x*_x + _y*_y);
         
         return new UnitVector(_x/_magnitude, _y/_magnitude);
     }

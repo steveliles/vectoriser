@@ -71,33 +71,27 @@ public class Shape implements Iterable<Chord>, Comparable<Shape> {
         }
     }
 
-    public List<Shape> simplify() {   
-        removeCompletelyNestedShapes();
-        List<Shape> _simpleShapes = segmentComplexShapes();
-        
-        List<Shape> _result = new ArrayList<Shape>();
-        for (Shape _s : _simpleShapes) {
-            _result.addAll(_s.outline());
-        }
-        
-        return _result;
-    }
-    
-    private List<Shape> outline() {        
+    public List<Shape> simplify() {               
         if (chords.isEmpty())
             return new ArrayList<Shape>();
                 
         List<Point> _points = new ArrayList<Point>();        
         for (Chord _c : chords) {
-            _points.add(_c.getEnd());
-        }
+            _points.add(new Point(_c.getEnd().getX()+1, _c.getEnd().getY()-1));
+        }        
+                
+        Point _p = last().getEnd();
+        _points.add(new Point(_p.getX(), _p.getY()));
+        _p = last().getStart();
+        _points.add(new Point(_p.getX()-1, _p.getY()));
         
         for (int i=chords.size()-1; i>=0; i--) {
-            _points.add(chords.get(i).getStart());
+            _p = chords.get(i).getStart();
+            _points.add(new Point(_p.getX()-1, _p.getY()));
         }
         
         Shape _shape = new Shape(colour);
-        Point _prev = first().getStart();
+        Point _prev = new Point(first().getStart().getX()-1, first().getStart().getY()-1);
         for (Point _current : _points) {
             _shape.add(new Chord(_prev, _current));
             _prev = _current;
@@ -108,152 +102,28 @@ public class Shape implements Iterable<Chord>, Comparable<Shape> {
         List<Shape> _result = new ArrayList<Shape>();        
         _result.add(_shape);
         return _result;
-    }
-        
-    private List<Shape> segmentComplexShapes() {
-        Shapes _shapes = new Shapes();
-        
-        Shape _main = new Shape(colour);
-        Chord _previous = null;
-        for (Chord _current : chords) {
-            if (isNewScanLine(_current, _previous)) {
-                _main.add(_current);                
-            } else {
-                Shape _s = _shapes.getTouchingShape(_current);
-                if (_s == null) {
-                    _s = new Shape(colour);
-                    _shapes.add(_s);
-                }
-                _s.add(_current);
-            }
-            _previous = _current;
-        }
-        
-        List<Shape> _result = _shapes.asList();
-        _result.add(_main);
-       
-        return _result;
-    }
-
-    private void removeCompletelyNestedShapes() {
-        Shapes _nested = new Shapes();
-                        
-        Chord _previous = null;        
-        for (Chord _current : chords) {
-            if (isNewScanLine(_current, _previous)) {
-                // nuthin'                
-            } else {
-                Chord _inner = new Chord(_previous.getEnd(), _current.getStart());
-                Shape _s = _nested.getTouchingShape(_inner);
-                if (_s == null) {
-                    _s = new Shape(colour);
-                    _nested.add(_s);
-                }
-                _s.add(_inner);
-            }
-            _previous = _current;
-        }
-        
-        for (Shape _s : _nested.asList()) {
-            if (completelyContains(_s)) {
-                remove(_s);
-                zIndex--;
-            }
-        }
-    }
-    
-    private boolean completelyContains(Shape aShape) {
-        Chord _bottom = aShape.last();        
-        for (Chord _c : chords) {
-            if (_c.getStart().getY() == _bottom.getStart().getY()+1) {
-                if (
-                    (_c.getStart().getX() <= _bottom.getStart().getX()) &&
-                    (_c.getEnd().getX() >= _bottom.getEnd().getX())
-                ) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    
-    private void remove(Shape aShape) {        
-        for (Chord _c : aShape.getChords()) {
-            Chord _before = findChordEndingAt(_c.getStart());
-            Chord _after = findChordStartingAt(_c.getEnd());
-            
-            _before.setEnd(_after.getEnd());
-            chords.remove(_after);
-        }
-    }
-    
-    private Chord findChordEndingAt(Point aPoint) {
-        for (Chord _c: chords) {
-            if (_c.getEnd().equals(aPoint))
-                return _c;
-        }
-        return null;
-    }
-
-    private Chord findChordStartingAt(Point aPoint) {
-        for (Chord _c: chords) {
-            if (_c.getStart().equals(aPoint))
-                return _c;
-        }
-        return null;
-    }
-    
-    private void collapse() {
+    }    
+         
+    private void collapse() {        
         List<Chord> _chords = new ArrayList<Chord>();
         
-        Chord _prev = new Chord(
-            chords.get(0).getStart(), 
-            chords.get(0).getEnd()
-        );
+        Chord _prev = chords.get(0);
                 
+        boolean _needsWrite = false;
         for (Chord _c : chords) {
-            if (_c.sameDirectionAs(_prev)) {
+            if (_c.sameDirectionAs(_prev, 0)) {
                 // skip
+                _needsWrite = true;
             } else {
                 _chords.add(new Chord(_prev.getStart(), _c.getStart()));
-                _prev = _c;                                
+                _prev = _c;        
+                _needsWrite = false;
             }
         }
         
-        _chords.add(new Chord(_prev.getStart(), chords.get(0).getStart()));
+        if (_needsWrite)
+            _chords.add(new Chord(_prev.getStart(), chords.get(0).getStart()));
         
         chords = _chords;
-    }
-    
-    private boolean isNewScanLine(Chord aCurrent, Chord aPrevious) {
-        if (aPrevious == null)
-            return true;
-        
-        return (aCurrent.getStart().getY() != aPrevious.getStart().getY());
-    }
-    
-    private class Shapes {
-        private List<Shape> shapes;
-        
-        public Shapes() {
-            shapes = new ArrayList<Shape>();
-        }
-        
-        public void add(Shape aShape) {
-            shapes.add(aShape);
-        }
-        
-        public Shape getTouchingShape(Chord aChord) {
-            for (int i=shapes.size()-1; i>=0; i--) {
-                Shape _s = shapes.get(i);
-                if (_s.touches(aChord))
-                    return _s;
-            }
-            return null;
-        }
-        
-        public List<Shape> asList() {
-            return shapes;
-        }
-    }
+    }    
 }

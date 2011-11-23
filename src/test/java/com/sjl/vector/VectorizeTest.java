@@ -22,7 +22,7 @@ public class VectorizeTest {
     @Test
     public void writeOneToTheDesktop()
     throws Exception {
-         Vectorizer _v = new Vectorizer();
+         Vectoriser _v = new Vectoriser();
          SVG _result = _v.vectorize(ImageIO.read(new File("/home/steve/Desktop/pre-processed-duck.png")));
          XMLOutputter _out = new XMLOutputter(Format.getPrettyFormat());
          
@@ -61,7 +61,7 @@ public class VectorizeTest {
     
     private void testVectorisation(String aBitmapName, String anSVGName)
     throws Exception {
-         Vectorizer _v = new Vectorizer();
+         Vectoriser _v = new Vectoriser();
          SVG _result = _v.vectorize(loadTestImage(aBitmapName));
          
          System.out.println(_result);

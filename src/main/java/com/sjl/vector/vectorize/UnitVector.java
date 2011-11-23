@@ -2,6 +2,8 @@ package com.sjl.vector.vectorize;
 
 public class UnitVector {
     
+    private static final double ONE_RADIAN = 180 / Math.PI;
+    
     private double x, y;
     
     public UnitVector(double anX, double aY) {
@@ -36,4 +38,23 @@ public class UnitVector {
             return false;
         return true;
     }
+
+    public int angleInDegrees(UnitVector aDirection) {
+        double _x = aDirection.x;
+        double _y = aDirection.y;  
+        
+System.out.println(magnitude());       
+        
+        return (int) (ONE_RADIAN * Math.acos(
+            ((x*_x) + (y*_y) / (magnitude() * aDirection.magnitude())))
+        );
+    }
+    
+    public double magnitude() {
+        return Math.sqrt((x*x) + (y*y));
+    }
+    
+    public String toString() {
+        return "|" + x + "," + y + "|";
+    }    
 }
