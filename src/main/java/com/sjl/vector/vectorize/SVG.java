@@ -6,9 +6,12 @@ import org.jdom.*;
 
 public class SVG {
 
+    private int width, height;    
     private Map<Colour, ColourMap> maps;
     
-    public SVG() {
+    public SVG(int aWidth, int aHeight) {
+        width = aWidth;
+        height = aHeight;
         maps = new HashMap<Colour, ColourMap>();
     }
     
@@ -24,11 +27,73 @@ public class SVG {
             maps.put(aColour, _m);
         }
         return _m;
-    }           
+    }
     
     public Document toXML() {
         Namespace _ns = Namespace.getNamespace("http://www.w3.org/2000/svg");
         Element _root = new Element("svg", _ns);
+        _root.setAttribute("width", "" + width);
+        _root.setAttribute("height", "" + height);
+        _root.setAttribute("viewBox", "0 0 " + width + " " + height);
+        
+        List<Shape> _shapes = new ArrayList<Shape>();
+        for (ColourMap _cm : maps.values()) {
+            _shapes.addAll(_cm.getShapes());
+        }
+        
+        Collections.sort(_shapes);
+        
+        for (Shape _s : _shapes) {                
+            Element _e = new Element("path", _ns);
+            _e.setAttribute("stroke-width", "2");
+            _e.setAttribute("stroke", _s.getColour().toString());
+            _e.setAttribute("fill", _s.getColour().toString());
+            _e.setAttribute("d", getCurves(_s));
+            
+            _root.addContent(_e);
+        }
+        
+        return new Document(_root);        
+    }
+    
+    private String getCurves(Shape aShape) {
+        StringBuilder _sb = new StringBuilder();
+        Chord _previous = null;
+        for (Chord _current : aShape) {
+            if (_previous != null) {
+                curve(_sb, _previous, _current);
+            } else {
+                _sb.append(" M " + position(aShape.first().getStart()));
+            }
+            _previous = _current;
+        }
+        
+        if (_previous != null)
+            curve(_sb, _previous, aShape.first());
+        
+        _sb.append(" Z");
+        
+        return _sb.toString();
+    }
+
+    private void curve(StringBuilder _sb, Chord _previous, Chord _current)
+    {
+        _sb.append(" C ").
+            append(position(_previous.getStart())).        
+            append(position(_previous.getEnd())).
+            append(position(_current.getStart()));        
+    }
+    
+    private String position(Point aPoint) {
+        return aPoint.getX() + " " + aPoint.getY() + " ";
+    }
+    
+    public Document toPolyXML() {
+        Namespace _ns = Namespace.getNamespace("http://www.w3.org/2000/svg");
+        Element _root = new Element("svg", _ns);
+        _root.setAttribute("width", "" + width);
+        _root.setAttribute("height", "" + height);
+        _root.setAttribute("viewBox", "0 0 " + width + " " + height);
         
         List<Shape> _shapes = new ArrayList<Shape>();
         for (ColourMap _cm : maps.values()) {

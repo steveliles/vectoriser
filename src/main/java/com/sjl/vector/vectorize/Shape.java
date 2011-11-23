@@ -77,21 +77,15 @@ public class Shape implements Iterable<Chord>, Comparable<Shape> {
                 
         List<Point> _points = new ArrayList<Point>();        
         for (Chord _c : chords) {
-            _points.add(new Point(_c.getEnd().getX()+1, _c.getEnd().getY()-1));
+            _points.add(_c.getEnd());
         }        
-                
-        Point _p = last().getEnd();
-        _points.add(new Point(_p.getX(), _p.getY()));
-        _p = last().getStart();
-        _points.add(new Point(_p.getX()-1, _p.getY()));
         
         for (int i=chords.size()-1; i>=0; i--) {
-            _p = chords.get(i).getStart();
-            _points.add(new Point(_p.getX()-1, _p.getY()));
+            _points.add(chords.get(i).getStart());
         }
         
         Shape _shape = new Shape(colour);
-        Point _prev = new Point(first().getStart().getX()-1, first().getStart().getY()-1);
+        Point _prev = first().getStart();
         for (Point _current : _points) {
             _shape.add(new Chord(_prev, _current));
             _prev = _current;

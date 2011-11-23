@@ -22,7 +22,7 @@ public class Vectoriser {
     
     public SVG vectorize(BufferedImage anImage)
     throws Exception {
-        SVG _svg = new SVG();
+        SVG _svg = new SVG(anImage.getWidth(), anImage.getHeight());
         Raster _raster = anImage.getData();
      
         Pixel _start = null;
