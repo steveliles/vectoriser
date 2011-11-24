@@ -29,7 +29,7 @@ public class SVG {
         return _m;
     }
     
-    public Document toXML() {
+    public Document toPathXML() {
         Namespace _ns = Namespace.getNamespace("http://www.w3.org/2000/svg");
         Element _root = new Element("svg", _ns);
         _root.setAttribute("width", "" + width);
@@ -88,7 +88,7 @@ public class SVG {
         return aPoint.getX() + " " + aPoint.getY() + " ";
     }
     
-    public Document toPolyXML() {
+    public Document toPolygonXML() {
         Namespace _ns = Namespace.getNamespace("http://www.w3.org/2000/svg");
         Element _root = new Element("svg", _ns);
         _root.setAttribute("width", "" + width);
