@@ -26,7 +26,7 @@ public class VectorizeTest {
          SVG _result = _v.vectorize(ImageIO.read(new File("/home/steve/Desktop/pre-processed-duck.png")));
          XMLOutputter _out = new XMLOutputter(Format.getPrettyFormat());
          
-        _out.output(_result.toXML(), new FileWriter(new File("/home/steve/Desktop/test.txt")));
+        _out.output(_result.toPathXML(), new FileWriter(new File("/home/steve/Desktop/test.txt")));
     }
     
     @Test
@@ -70,7 +70,7 @@ public class VectorizeTest {
                   
          Assert.assertEquals(
              loadExpectedSVGAsString(anSVGName), 
-             _out.outputString(_result.toXML())
+             _out.outputString(_result.toPathXML())
          );
     }
     

@@ -15,7 +15,7 @@ public class ColourSmoother
         int _lensWidth = getInt(anArgs, 1, 4);
         int _lensHeight = getInt(anArgs, 2, 4);
         
-        ImageIO.write(_vpp.preProcess(_lensWidth, _lensHeight, _img), "png", new File(anArgs[1]));
+        ImageIO.write(_vpp.preProcess(_lensWidth, _lensHeight, _img), "png", new File(anArgs[3]));
     }
     
     private static int getInt(String[] aStrings, int anIndex, int aDefaultValue) {
@@ -51,7 +51,7 @@ public class ColourSmoother
     }
     
     private int count(int anOffset, int[] aSurrounding) {
-        ColourCalculator _c = new ColourCalculator.WeightedAverage();
+        ColourCalculator _c = new ColourCalculator.MostFrequent();
         int _length = aSurrounding.length-(2-anOffset);
         for (int i=anOffset; i<_length; i+=3) {
             _c.add(aSurrounding[i]);

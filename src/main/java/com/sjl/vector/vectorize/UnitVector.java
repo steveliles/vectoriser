@@ -41,9 +41,7 @@ public class UnitVector {
 
     public int angleInDegrees(UnitVector aDirection) {
         double _x = aDirection.x;
-        double _y = aDirection.y;  
-        
-System.out.println(magnitude());       
+        double _y = aDirection.y;
         
         return (int) (ONE_RADIAN * Math.acos(
             ((x*_x) + (y*_y) / (magnitude() * aDirection.magnitude())))
